@@ -41,7 +41,26 @@ app.post("/estudiantes/nuevo",(req,res)=>{
     })
 })
 //FIIN CREAR ESTUDIANTE
-
+//EDIT ESTUDIANTE
+app.post("/estudiantes/:name",(req,res)=>{
+    const cambios = req.body
+    const nombreBuscado = req.params.name
+    Estudiante.update(
+        {//query
+            name:nombreBuscado
+        },
+        {//update
+            $set: req.body
+        },
+        (err,doc)=>{//callback
+            if(err){
+                console.log(err)
+            }
+            res.send(doc)
+        }
+    )
+})
+//FIN EDIT ESTUDIANTE
 
 app.get("/estudiantes/:name",(req,res) => {
 
@@ -77,6 +96,22 @@ app.get("/carrera",(req,res)=>{
         res.send(datos)
     })
 })
+//UNA SOLA CARRERA
+app.get("/carrera/:Titulo",(req,res) => {
+    const careerBusqueda = req.params.Titulo
+    Carrera.find({Titulo:careerBusqueda}).then(datos => {
+        res.send(datos)
+    })
+})
+//FIN CARRERA
+//CREAR CARRERA
+app.post("/carrera/nuevo",(req,res)=>{
+    const nuevaCarrera = new Carrera(req.body)
+    nuevaCarrera.save((err,docs) => {
+        res.send(docs)
+    })
+})
+//FIN CARRERA
 //5.- Listener(Switch)
 app.listen(3002,() => {
     console.log("Conectados al puerto 3002")
