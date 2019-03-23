@@ -29,6 +29,20 @@ app.get("/estudiantes/Americo",(req,res)=>{
     })
 })
 
+//CREAR ESTUDIANTE
+app.post("/estudiantes/nuevo",(req,res)=>{
+    //1.-crear estudiante bajo modelo
+    const nuevoEstudiante = new Estudiante(req.body)
+    //2.-inyectar nuevo estudiante en bd
+    //mostrar en postman que se inyecto
+    nuevoEstudiante.save((err,docs) => {
+        console.log(docs)
+        res.send(docs)
+    })
+})
+//FIIN CREAR ESTUDIANTE
+
+
 app.get("/estudiantes/:name",(req,res) => {
 
     const nombrebusqueda = req.params.name
@@ -42,6 +56,22 @@ app.get("/profesores",(req,res)=>{
         res.send(datos)
     })
 })
+//UN SOLO PROFESOR
+app.get("/profesores/:name",(req,res) => {
+    const profBusqueda = req.params.name
+    Profesor.find({name:profBusqueda}).then(datos => {
+        res.send(datos)
+    })
+})
+//FIN PROFESOR
+//CREAR PROFESOR
+app.post("/profesores/nuevo",(req,res)=>{
+    const nuevoProfesor = new Profesor(req.body)
+    nuevoProfesor.save((err,docs) => {
+        res.send(docs)
+    })
+})
+//FIN PROFESOR
 app.get("/carrera",(req,res)=>{
     Carrera.find({}).then(datos => {
         res.send(datos)
