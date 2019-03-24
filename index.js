@@ -16,6 +16,8 @@ const {Profesor} = require("./models/profesor.js")
 const {Carrera} = require("./models/carrera.js")
 //4.- Rutas
 //http://localhost:3002/estudiantes
+
+//Obtiene todos los estudiantes
 app.get("/estudiantes",(req,res) => {
     Estudiante.find({}).then(datos => {
         res.send(datos)
@@ -41,7 +43,7 @@ app.post("/estudiantes/nuevo",(req,res)=>{
     })
 })
 //FIIN CREAR ESTUDIANTE
-//EDIT ESTUDIANTE
+//EDITAR ESTUDIANTE
 app.post("/estudiantes/:name",(req,res)=>{
     const cambios = req.body
     const nombreBuscado = req.params.name
@@ -60,8 +62,8 @@ app.post("/estudiantes/:name",(req,res)=>{
         }
     )
 })
-//FIN EDIT ESTUDIANTE
-
+//FIN EDITAR ESTUDIANTE
+//OBTENER ESTUDIANTE POR NOMBRE
 app.get("/estudiantes/:name",(req,res) => {
 
     const nombrebusqueda = req.params.name
@@ -70,19 +72,25 @@ app.get("/estudiantes/:name",(req,res) => {
         res.send(datos)
     })
 })
+//FIN OBTENER ESTUDIANTE POR NOMBRE
+
+//OBTENER TODOS LOS PROFESORES
 app.get("/profesores",(req,res)=>{
     Profesor.find({}).then(datos => {
         res.send(datos)
     })
 })
-//UN SOLO PROFESOR
+//FIN OBTENER TODOS LOS PROFESORES
+
+//OBTENER UN SOLO PROFESOR POR NOMBRE
 app.get("/profesores/:name",(req,res) => {
     const profBusqueda = req.params.name
     Profesor.find({name:profBusqueda}).then(datos => {
         res.send(datos)
     })
 })
-//FIN PROFESOR
+// FIN OBTENER UN SOLO PROFESOR
+
 //CREAR PROFESOR
 app.post("/profesores/nuevo",(req,res)=>{
     const nuevoProfesor = new Profesor(req.body)
@@ -90,12 +98,36 @@ app.post("/profesores/nuevo",(req,res)=>{
         res.send(docs)
     })
 })
-//FIN PROFESOR
+//FIN CREAR PROFESOR
+
+//EDITAR PROFESOR
+app.post("/profesores/:name",(req,res)=>{
+    const editar = req.body
+    const profBuscado = req.params.name
+    Profesor.update(
+        {
+            name:profBuscado
+        },
+        {
+            $set: req.body
+        },
+        (err,doc)=>{
+            if(err){
+                console.log(err)
+            }
+            res.send(doc)
+        }
+    )
+})
+//FIN EDITAR PROFESOR
+
+//OBTENER CARRERAS
 app.get("/carrera",(req,res)=>{
     Carrera.find({}).then(datos => {
         res.send(datos)
     })
 })
+// FIN OBTENER CARRERAS
 //UNA SOLA CARRERA
 app.get("/carrera/:Titulo",(req,res) => {
     const careerBusqueda = req.params.Titulo
@@ -103,7 +135,7 @@ app.get("/carrera/:Titulo",(req,res) => {
         res.send(datos)
     })
 })
-//FIN CARRERA
+//FIN UNA SOLA CARRERA
 //CREAR CARRERA
 app.post("/carrera/nuevo",(req,res)=>{
     const nuevaCarrera = new Carrera(req.body)
@@ -111,7 +143,7 @@ app.post("/carrera/nuevo",(req,res)=>{
         res.send(docs)
     })
 })
-//FIN CARRERA
+//FIN CREAR CARRERA
 //5.- Listener(Switch)
 app.listen(3002,() => {
     console.log("Conectados al puerto 3002")
